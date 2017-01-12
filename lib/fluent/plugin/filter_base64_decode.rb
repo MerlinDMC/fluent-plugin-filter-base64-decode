@@ -15,9 +15,6 @@ module Fluent
 
     def configure(conf)
       super
-
-      # Convert all field names into symbols
-      @fields = @fields.map { |k| k.to_sym }
     end
 
     def filter(tag, time, record)
