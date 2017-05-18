@@ -3,7 +3,6 @@ require_relative '../test_helper'
 class Base64DecodeFilterTest < Test::Unit::TestCase
   def setup
     Fluent::Test.setup
-    @time = Fluent::Engine.now
   end
 
   CONFIG = %[
@@ -12,13 +11,6 @@ class Base64DecodeFilterTest < Test::Unit::TestCase
 
   def create_driver(conf=CONFIG)
     Fluent::Test::Driver::Filter.new(Fluent::Plugin::Base64DecodeFilter).configure(conf)
-  end
-
-  def emit(config, record)
-    d = create_driver(config)
-    d.run {
-      d.emit(record, @time)
-    }.filtered
   end
 
   test 'configure' do
