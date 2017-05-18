@@ -5,4 +5,5 @@ $LOAD_PATH.unshift(File.join(__dir__, '..', 'lib'))
 $LOAD_PATH.unshift(__dir__)
 
 require 'fluent/test'
+require 'fluent/test/driver/filter'
 require 'fluent/plugin/filter_base64_decode'
