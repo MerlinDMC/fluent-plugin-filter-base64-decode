@@ -3,7 +3,6 @@ require_relative '../test_helper'
 class Base64DecodeFilterTest < Test::Unit::TestCase
   def setup
     Fluent::Test.setup
-    @time = Fluent::Engine.now
   end
 
   CONFIG = %[
@@ -11,14 +10,7 @@ class Base64DecodeFilterTest < Test::Unit::TestCase
   ]
 
   def create_driver(conf=CONFIG)
-    Fluent::Test::FilterTestDriver.new(Fluent::Base64DecodeFilter).configure(conf, true)
-  end
-
-  def emit(config, record)
-    d = create_driver(config)
-    d.run {
-      d.emit(record, @time)
-    }.filtered
+    Fluent::Test::Driver::Filter.new(Fluent::Plugin::Base64DecodeFilter).configure(conf)
   end
 
   test 'configure' do
@@ -27,16 +19,20 @@ class Base64DecodeFilterTest < Test::Unit::TestCase
   end
 
   test 'decode' do
-    es = emit(CONFIG, {
-                'field1' => "T0s=",
-                'field3' => "T0s="
-              })
-
-    es.each { |time, record|
-      assert_equal 'OK', record['field1']
-      assert_equal 'T0s=', record['field3']
-      assert_equal false, record.has_key?('field2')
+    d = create_driver(CONFIG)
+    record = {
+      'field1' => "T0s=",
+      'field3' => "T0s="
     }
-  end
+    d.run(default_tag: "test") do
+      d.feed(record)
+    end
 
+    filtered_records = d.filtered_records
+    assert_equal(1, filtered_records.size)
+    record = filtered_records[0]
+    assert_equal 'OK', record['field1']
+    assert_equal 'T0s=', record['field3']
+    assert_equal false, record.has_key?('field2')
+  end
 end

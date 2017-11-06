@@ -3,19 +3,11 @@ require 'base64'
 
 require 'fluent/plugin/filter'
 
-module Fluent
-  class Base64DecodeFilter < Filter
-    Plugin.register_filter('base64_decode', self)
-
-    def initialize
-      super
-    end
+module Fluent::Plugin
+  class Base64DecodeFilter < Fluent::Plugin::Filter
+    Fluent::Plugin.register_filter('base64_decode', self)
 
     config_param :fields, :array, value_type: :string
-
-    def configure(conf)
-      super
-    end
 
     def filter(tag, time, record)
       @fields.each { |key|
