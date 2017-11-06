@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.license     = "MIT"
   gem.homepage    = "https://github.com/MerlinDMC/fluent-plugin-filter-base64-decode"
   gem.summary     = gem.description
-  gem.version     = "0.1.0"
+  gem.version     = "0.2.0"
   gem.authors     = ["Daniel Malon"]
   gem.email       = "daniel.malon@me.com"
   gem.has_rdoc    = false
